@@ -11,4 +11,5 @@ Steps to run:
 - Mac: source venv/bin/activate
 - pip install -r requirements.txt
 - create .env file with your OpenAI, X, and Reddit keys
-- In terminal run python main.py
+- In terminal run create_tg_session.py and enter code + password to create an anon.session
+- In terminal run python main_content.py
