@@ -2,18 +2,17 @@
 import os
 from langchain.tools import tool
 from crewai import Agent, Task, Process, Crew
-from custom_functions import post_to_twitter_callback
 from langchain.agents import load_tools
 from langchain_openai import ChatOpenAI
 import os
 import time
 from dotenv import load_dotenv
-from custom_functions import BrowserTool, post_to_socials, validate_report
+from research_tweeting.custom_functions import BrowserTool, post_to_socials, validate_report, post_to_twitter_callback
 import asyncio
 from crewai.tasks.task_output import TaskOutput
 import logging
 os.environ['PYTHONIOENCODING'] = 'UTF-8'
-from variables import selected_reddit_subs
+from research_tweeting.variables import selected_reddit_subs
 
 #load environment vars
 load_dotenv() 
@@ -42,8 +41,8 @@ def define_agents_tasks_and_crew():
     reddit_explorer = Agent(
         name="RedditExplorer",
         role="Cryptocurrency Reddit Researcher",
-        goal="Explore and gather the latest news and trends from the subreddits {selected_reddit_subs}",
-        backstory="""You are and Expert strategist that knows how to spot emerging trends and important events in Crypto, blockchain and web3 TODAY. 
+        goal=f"Explore and gather the latest news and trends from the subreddits {selected_reddit_subs}",
+        backstory=f"""You are and Expert strategist that knows how to spot emerging trends and important events in Crypto, blockchain and web3 TODAY. 
         You're great at finding exciting projects on subreddits {selected_reddit_subs}. You turned scraped data into detailed reports with titles
         of the most exciting developments in the crypto world. ONLY use scraped data from subreddits {selected_reddit_subs} for the report. Make sure not to forget the links to the posts.""",
         verbose=True,
@@ -89,7 +88,7 @@ def define_agents_tasks_and_crew():
         - Read through all the content first from your researchers. 
         - The report starts directly with bullet points.
         - Each bullet point summarizes a specific crypto development.
-        - Each bullet point contains a valid link to the original post. If you can't find it, indicate from which source (e.g. which telegram channel or Subreddit) it is coming. 
+        - Each bullet point contains a valid link to the original post. If you can't find it, indicate from which source (e.g. which Subreddit) it is coming. 
         - Check for and resolve duplications or inconsistencies.""",
         agent=EditorInChief,
         expected_output="""A cohesive report with bullet points summarizing the latest developments in the cryptocurrency world. Each bullet point contains a summary, valid link, and logical flow.""",
@@ -135,7 +134,7 @@ def main_function():
                 logger.info("Retrying...")
         else:
             logger.info("Validation succesfull: %s", message)
-            #post_to_socials(result_explorers)
+            post_to_socials(result_explorers)
             logger.info("############################################")
             logger.info('CREWAI IS DONE')
             break  # Exit the loop if validation is successful

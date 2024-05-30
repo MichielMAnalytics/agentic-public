@@ -13,7 +13,7 @@ import time
 import requests
 from telethon.sync import TelegramClient
 import asyncio
-from variables import selected_reddit_subs
+from research_tweeting.variables import selected_reddit_subs
 import re
 import logging
 
